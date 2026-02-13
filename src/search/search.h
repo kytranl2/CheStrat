@@ -6,6 +6,7 @@
 #include "ttable.h"
 #include <atomic>
 #include <functional>
+#include <deque>
 #include <vector>
 
 namespace chess {
@@ -29,7 +30,7 @@ public:
     Searcher();
 
     Move search(Board& board, const SearchLimits& limits,
-                std::vector<StateInfo>& states,
+                std::deque<StateInfo>& states,
                 InfoCallback on_info = nullptr);
 
     void stop() { stop_flag_.store(true); }
@@ -37,9 +38,9 @@ public:
 
 private:
     int alpha_beta(Board& board, int alpha, int beta, int depth, int ply,
-                   std::vector<StateInfo>& states);
+                   std::deque<StateInfo>& states);
     int quiescence(Board& board, int alpha, int beta, int ply,
-                   std::vector<StateInfo>& states);
+                   std::deque<StateInfo>& states);
     void order_moves(const Board& board, MoveList& moves, Move tt_move);
 
     TranspositionTable tt_;

@@ -3,6 +3,7 @@
 #include "../core/board.h"
 #include "../core/move.h"
 #include "../search/search.h"
+#include <deque>
 #include <vector>
 
 namespace chess {
@@ -34,7 +35,7 @@ public:
 private:
     Board board_;
     Searcher searcher_;
-    std::vector<StateInfo> states_;
+    std::deque<StateInfo> states_;
 
     void ensure_state();
 };

@@ -62,7 +62,7 @@ void Searcher::order_moves(const Board& board, MoveList& moves, Move tt_move) {
 }
 
 int Searcher::quiescence(Board& board, int alpha, int beta, int ply,
-                         std::vector<StateInfo>& states) {
+                         std::deque<StateInfo>& states) {
     ++nodes_;
 
     int stand_pat = evaluate(board);
@@ -97,7 +97,7 @@ int Searcher::quiescence(Board& board, int alpha, int beta, int ply,
 }
 
 int Searcher::alpha_beta(Board& board, int alpha, int beta, int depth, int ply,
-                         std::vector<StateInfo>& states) {
+                         std::deque<StateInfo>& states) {
     if (should_stop()) return 0;
 
     // Check transposition table
@@ -170,7 +170,7 @@ int Searcher::alpha_beta(Board& board, int alpha, int beta, int depth, int ply,
 }
 
 Move Searcher::search(Board& board, const SearchLimits& limits,
-                      std::vector<StateInfo>& states,
+                      std::deque<StateInfo>& states,
                       InfoCallback on_info) {
     stop_flag_.store(false);
     nodes_ = 0;
