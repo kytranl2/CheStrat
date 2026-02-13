@@ -34,6 +34,7 @@ void GameController::new_game(chess::Color human_color) {
 
 void GameController::start_ai_turn() {
     state_ = GameState::AI_THINKING;
+    render_board_ = engine_.board();
     ai_future_ = std::async(std::launch::async, [this]() {
         chess::SearchLimits limits;
         limits.max_depth = 20;
@@ -197,12 +198,15 @@ void GameController::handle_event(const sf::Event& event) {
 void GameController::render() {
     bool flipped = (human_color_ == chess::BLACK);
 
+    // Use snapshot during AI search to avoid race condition
+    const chess::Board& board = (state_ == GameState::AI_THINKING) ? render_board_ : engine_.board();
+
     window_.clear();
     renderer_.draw_board();
     renderer_.draw_last_move(last_move_, flipped);
 
-    if (engine_.board().in_check()) {
-        renderer_.draw_check_highlight(engine_.board().king_square(engine_.board().side_to_move()), flipped);
+    if (board.in_check()) {
+        renderer_.draw_check_highlight(board.king_square(board.side_to_move()), flipped);
     }
 
     if (state_ == GameState::HUMAN_TURN) {
@@ -210,7 +214,7 @@ void GameController::render() {
         renderer_.draw_highlights(selected_, legal, flipped);
     }
 
-    renderer_.draw_pieces(engine_.board(), flipped);
+    renderer_.draw_pieces(board, flipped);
 
     if (state_ == GameState::PROMOTION_DIALOG) {
         renderer_.draw_promotion_dialog(human_color_, promo_square_, flipped);

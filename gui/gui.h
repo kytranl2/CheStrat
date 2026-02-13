@@ -45,6 +45,9 @@ private:
     int ai_depth_ = 0;
     int ai_score_ = 0;
     uint64_t ai_nodes_ = 0;
+
+    // Board snapshot for rendering during AI search
+    chess::Board render_board_;
 };
 
 } // namespace gui

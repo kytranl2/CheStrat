@@ -53,6 +53,9 @@ bool Engine::apply_uci_move(const std::string& uci) {
 }
 
 Move Engine::think(const SearchLimits& limits, InfoCallback on_info) {
+    // Reserve enough space so the vector never reallocates during search,
+    // which would invalidate the board's StateInfo pointer.
+    states_.reserve(states_.size() + limits.max_depth + 128);
     return searcher_.search(board_, limits, states_, on_info);
 }
 
