@@ -2,6 +2,7 @@
 
 #include "../core/board.h"
 #include "../core/move.h"
+#include "../core/movegen.h"
 #include "ttable.h"
 #include <atomic>
 #include <functional>
